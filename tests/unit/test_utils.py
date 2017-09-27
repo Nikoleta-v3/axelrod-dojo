@@ -1,12 +1,12 @@
 import unittest
 
-import csv
 import io
 import tempfile
 import functools
 
 import axelrod as axl
 import axelrod_dojo.utils as utils
+
 
 class TestOutputer(unittest.TestCase):
     temporary_file = tempfile.NamedTemporaryFile()
@@ -179,6 +179,7 @@ class DummyParams(utils.Params):
     """
     def player(self):
         return axl.Cooperator()
+
 
 class TestScoreParams(unittest.TestCase):
     def test_score(self):

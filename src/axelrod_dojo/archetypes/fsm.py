@@ -5,7 +5,7 @@ import numpy as np
 from axelrod import Action, FSMPlayer
 from axelrod.action import UnknownActionError
 
-from axelrod_dojo.utils import Params, Population, prepare_objective
+from axelrod_dojo.utils import Params
 
 C, D = Action.C, Action.D
 
