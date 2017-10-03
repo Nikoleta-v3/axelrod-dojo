@@ -1,4 +1,5 @@
 import random
+import itertools
 from random import randrange, choice
 
 import numpy as np
@@ -32,7 +33,6 @@ class FSMParams(Params):
             self.rows = copy_lists(rows)
         self.initial_state = initial_state
         self.initial_action = initial_action
-
 
     def player(self):
         player = self.PlayerClass(self.rows, self.initial_state,
@@ -137,3 +137,30 @@ class FSMParams(Params):
             rows.append(row)
         num_states = len(rows) // 2
         return cls(num_states, 0.1, rows, initial_state, initial_action)
+
+    def receive_vector(self, vector):
+        self.vector = vector
+
+    def vector_to_instance(self):
+
+        num_states = int((len(self.vector) - 1) / 4)
+        state_scale = self.vector[:num_states * 2]
+        next_states = [int(s * (num_states - 1)) for s in state_scale]
+        actions = self.vector[num_states * 2: -1]
+        starting_move = C if round(self.vector[-1]) == 0 else D
+
+        fsm = []
+        for i, (initial_state, action) in enumerate(
+                itertools.product(range(num_states), [C, D])):
+            next_action = C if round(actions[i]) == 0 else D
+            fsm.append([initial_state, action, next_states[i], next_action])
+
+        return FSMPlayer(fsm, initial_action=starting_move)
+
+    def create_vector_bounds(self):
+        size = len(self.rows) * 2 + 1
+
+        lb = [0] * size
+        ub = [1] * size
+
+        return lb, ub
