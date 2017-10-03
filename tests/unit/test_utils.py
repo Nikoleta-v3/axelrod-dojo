@@ -171,6 +171,10 @@ class TestBaseParametersClass(unittest.TestCase):
         self.assertIsNone(parameters.params())
         other = axl.Player()
         self.assertIsNone(parameters.crossover(other))
+        vector = [0.2, 0.4, 0.6, 0.8]
+        self.assertIsNone(parameters.receive_vector(vector))
+        self.assertIsNone(parameters.vector_to_instance())
+        self.assertIsNone(parameters.create_vector_bounds())
 
 
 class DummyParams(utils.Params):

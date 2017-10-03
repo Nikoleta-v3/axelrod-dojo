@@ -134,17 +134,27 @@ class Params(object):
     def crossover(self, other):
         pass
 
+    def receive_vector(self, vector):
+        pass
+
+    def vector_to_instance(self):
+        pass
+
+    def create_vector_bounds(self):
+        pass
+
 PlayerInfo = namedtuple('PlayerInfo', ['strategy', 'init_kwargs'])
 
 
 def score_params(params, objective,
-                 opponents_information,
-                 weights=None, sample_count=None):
+                 opponents_information, weights=None, sample_count=None,
+                 instance_generation_function='player'):
     """
     Return the overall mean score of a Params instance.
     """
     scores_for_all_opponents = []
-    player = params.player()
+
+    player = getattr(params, instance_generation_function)()
 
     if sample_count is not None:
         indices = np.random.choice(len(opponents_information), sample_count)
@@ -180,29 +190,3 @@ def load_params(params_class, filename, num):
         best_params.append(parser(rep))
     return best_params
 
-
-## This function is only used for PSO.
-
-def score_for(strategy_factory, objective, args=None, opponents=None):
-    """
-    Given a function that will return a strategy, calculate the average score
-    per turn against all ordinary strategies. If the opponent is classified as
-    stochastic, then run 100 repetitions and take the average to get a good
-    estimate.
-    """
-    if not args:
-        args = []
-    scores_for_all_opponents = []
-    if not opponents:
-        opponents = axl.short_run_time_strategies
-
-    for opponent in opponents:
-        me = strategy_factory(*args)
-        other = opponent()
-        scores_for_this_opponent = objective(me, other)
-        mean_vs_opponent = mean(scores_for_this_opponent)
-        scores_for_all_opponents.append(mean_vs_opponent)
-
-    # Calculate the average for all opponents
-    overall_mean_score = mean(scores_for_all_opponents)
-    return overall_mean_score
