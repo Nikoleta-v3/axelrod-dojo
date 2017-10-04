@@ -139,9 +139,20 @@ class FSMParams(Params):
         return cls(num_states, 0.1, rows, initial_state, initial_action)
 
     def receive_vector(self, vector):
+        """Receives a vector and creates an instance attribute called
+        vector."""
         self.vector = vector
 
     def vector_to_instance(self):
+        """Turns the attribute vector in to a FSM player instance.
+         
+        The vector has three parts.The first is used to define the next state 
+        (for each of the player's states - for each opponents action).
+         
+        The second part is the player's next moves (for each state - for 
+        each opponent's actions).
+        
+        Finally, a probability to determine the player's first move."""
 
         num_states = int((len(self.vector) - 1) / 4)
         state_scale = self.vector[:num_states * 2]
@@ -158,6 +169,7 @@ class FSMParams(Params):
         return FSMPlayer(fsm, initial_action=starting_move)
 
     def create_vector_bounds(self):
+        """Creates the bounds for the decision variables."""
         size = len(self.rows) * 2 + 1
 
         lb = [0] * size

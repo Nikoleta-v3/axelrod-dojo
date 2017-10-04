@@ -135,12 +135,16 @@ class Params(object):
         pass
 
     def receive_vector(self, vector):
+        """Receives a vector and creates an instance attribute called
+        vector."""
         pass
 
     def vector_to_instance(self):
+        """Turns the attribute vector in to an axelrod player instance."""
         pass
 
     def create_vector_bounds(self):
+        """Creates the bounds for the decision variables."""
         pass
 
 PlayerInfo = namedtuple('PlayerInfo', ['strategy', 'init_kwargs'])

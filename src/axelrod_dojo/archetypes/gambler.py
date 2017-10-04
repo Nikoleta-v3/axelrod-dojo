@@ -8,7 +8,22 @@ C, D = Action.C, Action.D
 
 
 class GamblerParams(Params):
-
+    """
+    A class for a Gambler archetype used to train Gambler strategies using 
+    various optimization algorithms. 
+    
+    More details for the Gambler player can be found in the axelrod 
+    documentation: http://axelrod.readthedocs.io/ 
+    
+    Parameters
+    ----------
+    plays : integer
+        The number of player's last moves to remember
+    op_plays : integer
+        The number of opponent's last moves to remember
+    op_start_plays : integer
+        The number of opponent's initial moves to remember   
+    """
     def __init__(self, plays, op_plays, op_start_plays, pattern=None):
         self.PlayerClass = Gambler
         self.plays = plays
@@ -22,13 +37,16 @@ class GamblerParams(Params):
             self.pattern = pattern
 
     def receive_vector(self, vector):
+        """Receives a vector and creates an instance attribute called
+        vector."""
         self.vector = vector
 
     def vector_to_instance(self):
-
+        """Turns the attribute vector in to a Gambler player instance."""
         return Gambler(pattern=self.vector)
 
     def create_vector_bounds(self):
+        """Creates the bounds for the decision variables."""
         size = len(self.pattern)
         lb = [0.0] * size
         ub = [1.0] * size
