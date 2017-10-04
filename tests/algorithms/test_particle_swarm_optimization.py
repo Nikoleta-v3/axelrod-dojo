@@ -23,6 +23,7 @@ class TestPSO(unittest.TestCase):
         self.assertEqual(pso.phip, 0.8)
         self.assertEqual(pso.phig, 0.8)
         self.assertEqual(pso.omega, 0.8)
+        self.assertEqual(pso.processes, 1)
 
     def test_init(self):
         params = [2, 1, 1]
@@ -48,6 +49,7 @@ class TestPSO(unittest.TestCase):
         self.assertEqual(pso.phip, phip)
         self.assertEqual(pso.phig, phig)
         self.assertEqual(pso.omega, omega)
+        self.assertEqual(pso.processes, 1)
 
     def test_pso_with_gambler(self):
         name = "score"

@@ -27,11 +27,11 @@ class Population(object):
         else:
             self.bottleneck = bottleneck
         if opponents is None:
-            self.opponents_information = [
-                    PlayerInfo(s, {}) for s in axl.short_run_time_strategies]
+            self.opponents_information = [PlayerInfo(s, {}) for s in
+                                          axl.short_run_time_strategies]
         else:
-            self.opponents_information = [
-                    PlayerInfo(p.__class__, p.init_kwargs) for p in opponents]
+            self.opponents_information = [PlayerInfo(p.__class__, p.init_kwargs)
+                                          for p in opponents]
         self.generation = 0
         self.params_args = params_args
 
