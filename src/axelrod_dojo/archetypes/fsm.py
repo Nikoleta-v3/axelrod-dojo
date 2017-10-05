@@ -146,7 +146,7 @@ class FSMParams(Params):
     def vector_to_instance(self):
         """Turns the attribute vector in to a FSM player instance.
          
-        The vector has three parts.The first is used to define the next state 
+        The vector has three parts. The first is used to define the next state 
         (for each of the player's states - for each opponents action).
          
         The second part is the player's next moves (for each state - for 
