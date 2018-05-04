@@ -4,6 +4,9 @@ from axelrod import Action, Gambler
 from axelrod.strategies.lookerup import create_lookup_table_keys
 from axelrod_dojo.utils import Params
 
+from axelrod.strategies.lookerup import Plays
+
+
 C, D = Action.C, Action.D
 
 
@@ -24,11 +27,13 @@ class GamblerParams(Params):
     op_start_plays : integer
         The number of opponent's initial moves to remember   
     """
-    def __init__(self, plays, op_plays, op_start_plays, pattern=None):
+    def __init__(self, plays, op_plays, op_start_plays, pattern=None,
+                 mutation_probability=0):
         self.PlayerClass = Gambler
         self.plays = plays
         self.op_plays = op_plays
         self.op_start_plays = op_start_plays
+        self.mutation_probability = mutation_probability
 
         if pattern is None:
             self.randomize()
@@ -38,8 +43,14 @@ class GamblerParams(Params):
 
     def player(self):
         """Turns the attribute vector in to a Gambler player instance."""
-        player = self.PlayerClass(pattern=self.vector)
+        parameters = Plays(self_plays=self.plays, op_plays=self.op_plays,
+                           op_openings=self.op_start_plays)
+        player = self.PlayerClass(pattern=self.pattern, parameters=parameters)
         return player
+
+    def copy(self):
+        return GamblerParams(plays=self.plays, op_plays=self.op_plays,
+                             op_start_plays=self.op_start_plays, pattern=self.pattern)
 
     def receive_vector(self, vector):
         """Receives a vector and creates an instance attribute called
@@ -54,6 +65,24 @@ class GamblerParams(Params):
         ub = [1.0] * size
 
         return lb, ub
+
+    def mutate(self):
+        while random.random() < self.mutation_probability / 10:
+            index1, index2 = random.sample(range(len(self.pattern)), 2)
+            self.pattern[index1], self.pattern[index2] = self.pattern[index2], self.pattern[index1]
+        for gene in self.pattern:
+            if random.random() < self.mutation_probability / 10:
+                gene -= 0.1
+
+    def crossover(self, other):
+        pattern1 = self.pattern
+        pattern2 = other.pattern
+
+        midpoint = int(random.randint(0, len(pattern1)) / 2)
+        offspring = pattern1[:midpoint] + pattern2[midpoint:]
+        return GamblerParams(plays=self.plays, op_plays=self.op_plays,
+                             op_start_plays=self.op_start_plays, pattern=offspring,
+                             mutation_probability=self.mutation_probability)
 
     @staticmethod
     def random_params(plays, op_plays, op_start_plays):
