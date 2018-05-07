@@ -122,19 +122,14 @@ class TestGamblerParams(unittest.TestCase):
         self.assertEqual(gambler.op_plays, gambler.op_plays)
         self.assertEqual(gambler.op_start_plays, gambler.op_start_plays)
 
-    def test_mutation(self):
-        plays=1
-        op_plays=1
-        op_start_plays=1
-
-        gambler = GamblerParams(plays=plays, op_plays=op_plays,
-                                op_start_plays=op_start_plays)
-        pattern = gambler.pattern
+    def test_mutations(self):
+        gambler_params = GamblerParams(plays=1, op_plays=1, op_start_plays=1,
+                                       mutation_probability=0.3)
+        pattern = [i for i in gambler_params.pattern]
 
         axl.seed(0)
-        gambler.mutate()
+        _ = gambler_params.mutate()
 
-        mutated = pattern
-        mutated[2], mutated[3], mutated[4] = mutated[6], mutated[4], mutated[7]
-
-        self.assertEqual(gambler.pattern, mutated)
+        self.assertNotEqual(pattern, gambler_params.pattern)
+        self.assertEqual(pattern[:3], gambler_params.pattern[:3])
+        self.assertEqual(pattern[4:], gambler_params.pattern[4:])

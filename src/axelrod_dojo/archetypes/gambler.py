@@ -66,13 +66,15 @@ class GamblerParams(Params):
 
         return lb, ub
 
+    @staticmethod
+    def mutate_pattern(pattern, mutation_probability):
+        for i in range(len(pattern)):
+            if random.random() < mutation_probability:
+                pattern[i] += (random.random() - 1) * pattern[i]
+        return pattern
+
     def mutate(self):
-        while random.random() < self.mutation_probability:
-            index1, index2 = random.sample(range(len(self.pattern)), 2)
-            self.pattern[index1], self.pattern[index2] = self.pattern[index2], self.pattern[index1]
-        for gene in self.pattern:
-            if random.random() < self.mutation_probability / 10:
-                gene = max(0, gene - 0.1)
+        self.pattern = self.mutate_pattern(self.pattern, self.mutation_probability)
 
     def crossover(self, other):
         pattern1 = self.pattern
