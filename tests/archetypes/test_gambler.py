@@ -100,3 +100,41 @@ class TestGamblerParams(unittest.TestCase):
 
         self.assertEqual(gambler_params.__repr__(),
                          '1:1:1:0.05|0.07|0.7|0.03|0.6|0.7|0.45|0.1')
+
+    def test_crossover(self):
+        plays=1
+        op_plays=1
+        op_start_plays=1
+
+        gambler1 = GamblerParams(plays=plays, op_plays=op_plays,
+                                 op_start_plays=op_start_plays)
+
+        gambler2 = GamblerParams(plays=plays, op_plays=op_plays,
+                                 op_start_plays=op_start_plays)
+
+        axl.seed(0)
+        gambler = gambler1.crossover(gambler2)
+        self.assertEqual(gambler.pattern,
+                         gambler1.pattern[:3] + gambler2.pattern[3:])
+
+        self.assertEqual(gambler.PlayerClass, gambler1.PlayerClass)
+        self.assertEqual(gambler.plays, gambler.plays)
+        self.assertEqual(gambler.op_plays, gambler.op_plays)
+        self.assertEqual(gambler.op_start_plays, gambler.op_start_plays)
+
+    def test_mutation(self):
+        plays=1
+        op_plays=1
+        op_start_plays=1
+
+        gambler = GamblerParams(plays=plays, op_plays=op_plays,
+                                op_start_plays=op_start_plays)
+        pattern = gambler.pattern
+
+        axl.seed(0)
+        gambler.mutate()
+
+        mutated = pattern
+        mutated[2], mutated[3], mutated[4] = mutated[6], mutated[4], mutated[7]
+
+        self.assertEqual(gambler.pattern, mutated)
