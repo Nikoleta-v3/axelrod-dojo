@@ -71,6 +71,7 @@ class GamblerParams(Params):
         for i in range(len(pattern)):
             if random.random() < mutation_probability:
                 pattern[i] += (random.random() - 1) * pattern[i]
+                pattern[i] = min(pattern[i], 1)
         return pattern
 
     def mutate(self):
