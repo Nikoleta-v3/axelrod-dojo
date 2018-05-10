@@ -68,7 +68,7 @@ class GamblerParams(Params):
 
     @staticmethod
     def mutate_pattern(pattern, mutation_probability):
-        for i, gene in enumerate(pattern):
+        for i, _ in enumerate(pattern):
             if random.random() <= mutation_probability:
                 pattern[i] = random.random()
         return pattern
