@@ -164,12 +164,6 @@ class TestGamblerParams(unittest.TestCase):
         self.assertEqual(pattern[:3], gambler_params.pattern[:3])
         self.assertEqual(pattern[4:], gambler_params.pattern[4:])
 
-        for _ in range(100):
-            _ = gambler_params.mutate()
-
-        self.assertTrue(all(gene <= 1 for gene in gambler_params.pattern))
-        self.assertTrue(all(gene >= 0 for gene in gambler_params.pattern))
-
     def test_genes_in_bounds(self):
         gambler_params = GamblerParams(plays=1, op_plays=1, op_start_plays=1,
                                        mutation_probability=0.8)
