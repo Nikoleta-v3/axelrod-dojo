@@ -77,14 +77,11 @@ class TestPSO(unittest.TestCase):
         axl.seed(0)
         opt_vector, opt_objective_value = pso.swarm()
 
-        self.assertTrue(np.allclose(opt_vector, np.array([0.5488135, 0.71518937,
-                                                          0.60276338,
-                                                          0.54488318,
-                                                          0.4236548,
-                                                          0.64589411,
-                                                          0.43758721,
-                                                          0.891773])))
-        self.assertEqual(abs(opt_objective_value), 3)
+        self.assertTrue(np.allclose(opt_vector, np.array([[0.72231352, 0.29956341,
+                                                           0.82648405, 0.46293523,
+                                                           0.7069418, 0.85391998,
+                                                           0, 0.050593]])))
+        self.assertEqual(abs(opt_objective_value), 3.624)
 
     def test_pso_with_fsm(self):
         name = "score"
