@@ -21,7 +21,7 @@ class TestFSMPopulation(unittest.TestCase):
                                        noise=noise,
                                        repetitions=repetitions)
 
-    def test_geerations(self):
+    def test_generations(self):
         temporary_file = tempfile.NamedTemporaryFile()
 
         params_kwargs = {"plays": 1, "op_plays": 1, "op_start_plays": 2}
