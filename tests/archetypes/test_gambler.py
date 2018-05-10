@@ -3,6 +3,7 @@ import random
 import unittest
 
 from axelrod_dojo import GamblerParams
+from axelrod.strategies.lookerup import Plays
 
 C, D = axl.Action.C, axl.Action.D
 
@@ -21,6 +22,24 @@ class TestGamblerParams(unittest.TestCase):
         self.assertEqual(gambler_params.op_plays, op_plays)
         self.assertEqual(gambler_params.op_start_plays, op_start_plays)
 
+    def test_player(self):
+        plays, op_plays, op_start_plays = 1, 1, 1
+        pattern = [0 for _ in range(8)]
+        gambler = GamblerParams(plays=plays, op_plays=op_plays,
+                                op_start_plays=op_start_plays, pattern=pattern)
+
+        player =  gambler.player()
+        action_dict = {Plays(self_plays=(C,), op_plays=(C,), op_openings=(C,)): 0,
+                       Plays(self_plays=(C,), op_plays=(C,), op_openings=(D,)): 0,
+                       Plays(self_plays=(C,), op_plays=(D,), op_openings=(C,)): 0,
+                       Plays(self_plays=(C,), op_plays=(D,), op_openings=(D,)): 0,
+                       Plays(self_plays=(D,), op_plays=(C,), op_openings=(C,)): 0,
+                       Plays(self_plays=(D,), op_plays=(C,), op_openings=(D,)): 0,
+                       Plays(self_plays=(D,), op_plays=(D,), op_openings=(C,)): 0,
+                       Plays(self_plays=(D,), op_plays=(D,), op_openings=(D,)): 0}
+        
+        self.assertEqual(player.lookup_dict, action_dict)
+
     def test_receive_vector(self):
         plays = 1
         op_plays = 1
@@ -35,7 +54,7 @@ class TestGamblerParams(unittest.TestCase):
         vector = [random.random() for _ in range(6)]
         gambler_params.receive_vector(vector)
 
-        self.assertEqual(gambler_params.vector, vector)
+        self.assertEqual(gambler_params.pattern, vector)
 
     def test_vector_to_instance(self):
         plays = 1
