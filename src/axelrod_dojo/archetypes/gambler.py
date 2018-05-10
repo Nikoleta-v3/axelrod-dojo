@@ -55,7 +55,7 @@ class GamblerParams(Params):
     def receive_vector(self, vector):
         """Receives a vector and creates an instance attribute called
         vector.  Ignores extra parameters."""
-        self.vector = vector
+        self.pattern = vector
 
     def create_vector_bounds(self):
         """Creates the bounds for the decision variables.  Ignores extra

@@ -64,10 +64,21 @@ class TestGamblerParams(unittest.TestCase):
         gambler_params = GamblerParams(plays=plays, op_plays=op_plays,
                                        op_start_plays=op_start_plays)
 
-        gambler_params.receive_vector([random.random() for _ in range(8)])
+        vector = [random.random() for _ in range(8)]
+        gambler_params.receive_vector(vector)
         instance = gambler_params.player()
 
+        action_dict = {Plays(self_plays=(C,), op_plays=(C,), op_openings=(C,)): vector[0],
+                       Plays(self_plays=(C,), op_plays=(C,), op_openings=(D,)): vector[1],
+                       Plays(self_plays=(C,), op_plays=(D,), op_openings=(C,)): vector[2],
+                       Plays(self_plays=(C,), op_plays=(D,), op_openings=(D,)): vector[3],
+                       Plays(self_plays=(D,), op_plays=(C,), op_openings=(C,)): vector[4],
+                       Plays(self_plays=(D,), op_plays=(C,), op_openings=(D,)): vector[5],
+                       Plays(self_plays=(D,), op_plays=(D,), op_openings=(C,)): vector[6],
+                       Plays(self_plays=(D,), op_plays=(D,), op_openings=(D,)): vector[7]}
+
         self.assertIsInstance(instance, axl.Gambler)
+        self.assertEqual(instance.lookup_dict, action_dict)
 
     def test_create_vector_bounds(self):
         plays = 1
