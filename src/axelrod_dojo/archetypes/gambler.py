@@ -80,8 +80,8 @@ class GamblerParams(Params):
         pattern1 = self.pattern
         pattern2 = other.pattern
 
-        midpoint = int(random.randint(0, len(pattern1)) / 2)
-        offspring_pattern = pattern1[:midpoint] + pattern2[midpoint:]
+        cross_point = int(random.randint(0, len(pattern1)))
+        offspring_pattern = pattern1[:cross_point] + pattern2[cross_point:]
         return GamblerParams(plays=self.plays, op_plays=self.op_plays,
                              op_start_plays=self.op_start_plays,
                              pattern=offspring_pattern,

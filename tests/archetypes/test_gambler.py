@@ -123,7 +123,7 @@ class TestGamblerParams(unittest.TestCase):
         axl.seed(0)
         gambler = gambler1.crossover(gambler2)
         self.assertEqual(gambler.pattern,
-                         gambler1.pattern[:3] + gambler2.pattern[3:])
+                         gambler1.pattern[:6] + gambler2.pattern[6:])
 
         self.assertEqual(gambler.PlayerClass, gambler1.PlayerClass)
         self.assertEqual(gambler.plays, gambler.plays)
