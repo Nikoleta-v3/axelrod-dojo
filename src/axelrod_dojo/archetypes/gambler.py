@@ -1,4 +1,5 @@
 import random
+import numpy as np
 
 from axelrod import Action, Gambler
 from axelrod.strategies.lookerup import create_lookup_table_keys
@@ -68,9 +69,16 @@ class GamblerParams(Params):
 
     @staticmethod
     def mutate_pattern(pattern, mutation_probability):
+        randoms = np.random.random(len(pattern))
+
         for i, _ in enumerate(pattern):
-            if random.random() <= mutation_probability:
-                pattern[i] = random.random()
+            if randoms[i] < mutation_probability:
+                ep = random.uniform(-1, 1) / 4
+                pattern[i] += ep
+                if pattern[i] < 0:
+                    pattern[i] = 0
+                if pattern[i] > 1:
+                    pattern[i] = 1
         return pattern
 
     def mutate(self):

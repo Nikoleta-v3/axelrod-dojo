@@ -135,12 +135,13 @@ class TestGamblerParams(unittest.TestCase):
                                        mutation_probability=0.3)
         pattern = [i for i in gambler_params.pattern]
 
-        axl.seed(0)
+        axl.seed(1)
         _ = gambler_params.mutate()
 
         self.assertNotEqual(pattern, gambler_params.pattern)
-        self.assertEqual(pattern[:3], gambler_params.pattern[:3])
-        self.assertEqual(pattern[4:], gambler_params.pattern[4:])
+        self.assertEqual(pattern[:2], gambler_params.pattern[:2])
+        self.assertEqual(pattern[3], gambler_params.pattern[3])
+        self.assertEqual(pattern[-1], gambler_params.pattern[-1])
 
     def test_genes_in_bounds(self):
         gambler_params = GamblerParams(plays=1, op_plays=1, op_start_plays=1,
