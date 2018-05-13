@@ -53,8 +53,8 @@ class GamblerParams(Params):
                              op_start_plays=self.op_start_plays, pattern=self.pattern)
 
     def receive_vector(self, vector):
-        """Receives a vector and creates an instance attribute called
-        vector.  Ignores extra parameters."""
+        """Receives a vector and updates the player's pattern.
+          Ignores extra parameters."""
         self.pattern = vector
 
     def create_vector_bounds(self):
@@ -81,9 +81,10 @@ class GamblerParams(Params):
         pattern2 = other.pattern
 
         midpoint = int(random.randint(0, len(pattern1)) / 2)
-        offspring = pattern1[:midpoint] + pattern2[midpoint:]
+        offspring_pattern = pattern1[:midpoint] + pattern2[midpoint:]
         return GamblerParams(plays=self.plays, op_plays=self.op_plays,
-                             op_start_plays=self.op_start_plays, pattern=offspring,
+                             op_start_plays=self.op_start_plays,
+                             pattern=offspring_pattern,
                              mutation_probability=self.mutation_probability)
 
     @staticmethod

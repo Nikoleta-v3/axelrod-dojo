@@ -58,7 +58,7 @@ class TestFSMPopulation(unittest.TestCase):
                                      output_filename=temporary_file.name,
                                      opponents=self.opponents,
                                      bottleneck=2,
-                                     mutation_probability = .01,
+                                     mutation_probability=.01,
                                      processes=1)
 
         generations = 10

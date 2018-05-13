@@ -4,6 +4,7 @@ import unittest
 
 from axelrod_dojo import GamblerParams
 from axelrod.strategies.lookerup import Plays
+from axelrod.strategies.lookerup import create_lookup_table_keys
 
 C, D = axl.Action.C, axl.Action.D
 
@@ -29,21 +30,14 @@ class TestGamblerParams(unittest.TestCase):
                                 op_start_plays=op_start_plays, pattern=pattern)
 
         player =  gambler.player()
-        action_dict = {Plays(self_plays=(C,), op_plays=(C,), op_openings=(C,)): 0,
-                       Plays(self_plays=(C,), op_plays=(C,), op_openings=(D,)): 0,
-                       Plays(self_plays=(C,), op_plays=(D,), op_openings=(C,)): 0,
-                       Plays(self_plays=(C,), op_plays=(D,), op_openings=(D,)): 0,
-                       Plays(self_plays=(D,), op_plays=(C,), op_openings=(C,)): 0,
-                       Plays(self_plays=(D,), op_plays=(C,), op_openings=(D,)): 0,
-                       Plays(self_plays=(D,), op_plays=(D,), op_openings=(C,)): 0,
-                       Plays(self_plays=(D,), op_plays=(D,), op_openings=(D,)): 0}
-        
+        keys = create_lookup_table_keys(player_depth=plays, op_depth=op_plays,
+                                        op_openings_depth=op_start_plays)
+
+        action_dict = dict(zip(keys, pattern))
         self.assertEqual(player.lookup_dict, action_dict)
 
     def test_receive_vector(self):
-        plays = 1
-        op_plays = 1
-        op_start_plays = 1
+        plays, op_plays, op_start_plays = 1, 1, 1
 
         gambler_params = GamblerParams(plays=plays, op_plays=op_plays,
                                        op_start_plays=op_start_plays)
@@ -57,9 +51,7 @@ class TestGamblerParams(unittest.TestCase):
         self.assertEqual(gambler_params.pattern, vector)
 
     def test_vector_to_instance(self):
-        plays = 1
-        op_plays = 1
-        op_start_plays = 1
+        plays, op_plays, op_start_plays = 1, 1, 1
 
         gambler_params = GamblerParams(plays=plays, op_plays=op_plays,
                                        op_start_plays=op_start_plays)
@@ -68,22 +60,16 @@ class TestGamblerParams(unittest.TestCase):
         gambler_params.receive_vector(vector)
         instance = gambler_params.player()
 
-        action_dict = {Plays(self_plays=(C,), op_plays=(C,), op_openings=(C,)): vector[0],
-                       Plays(self_plays=(C,), op_plays=(C,), op_openings=(D,)): vector[1],
-                       Plays(self_plays=(C,), op_plays=(D,), op_openings=(C,)): vector[2],
-                       Plays(self_plays=(C,), op_plays=(D,), op_openings=(D,)): vector[3],
-                       Plays(self_plays=(D,), op_plays=(C,), op_openings=(C,)): vector[4],
-                       Plays(self_plays=(D,), op_plays=(C,), op_openings=(D,)): vector[5],
-                       Plays(self_plays=(D,), op_plays=(D,), op_openings=(C,)): vector[6],
-                       Plays(self_plays=(D,), op_plays=(D,), op_openings=(D,)): vector[7]}
+        keys = create_lookup_table_keys(player_depth=plays, op_depth=op_plays,
+                                        op_openings_depth=op_start_plays)
+
+        action_dict = dict(zip(keys, vector))
 
         self.assertIsInstance(instance, axl.Gambler)
         self.assertEqual(instance.lookup_dict, action_dict)
 
     def test_create_vector_bounds(self):
-        plays = 1
-        op_plays = 1
-        op_start_plays = 1
+        plays, op_plays, op_start_plays = 1, 1, 1
 
         gambler_params = GamblerParams(plays=plays, op_plays=op_plays,
                                        op_start_plays=op_start_plays)
@@ -95,9 +81,7 @@ class TestGamblerParams(unittest.TestCase):
         self.assertEqual(len(ub), 8)
 
     def test_random_params(self):
-        plays = 2
-        op_plays = 2
-        op_start_plays = 2
+        plays, op_plays, op_start_plays = 2, 2, 2
 
         table = GamblerParams.random_params(plays=plays, op_plays=op_plays,
                                             op_start_plays=op_start_plays)
@@ -106,9 +90,7 @@ class TestGamblerParams(unittest.TestCase):
         self.assertEqual(len(table), 64)
 
     def test_randomize(self):
-        plays = 2
-        op_plays = 2
-        op_start_plays = 2
+        plays, op_plays, op_start_plays = 2, 2, 2
 
         gambler_params = GamblerParams(plays=plays, op_plays=op_plays,
                                        op_start_plays=op_start_plays)
@@ -117,9 +99,7 @@ class TestGamblerParams(unittest.TestCase):
         self.assertEqual(len(gambler_params.pattern), 64)
 
     def test_repr(self):
-        plays = 1
-        op_plays = 1
-        op_start_plays = 1
+        plays, op_plays, op_start_plays = 1, 1, 1
 
         pattern = [0.05, 0.07, 0.70, 0.03,
                    0.60, 0.70, 0.45, 0.10]
@@ -132,9 +112,7 @@ class TestGamblerParams(unittest.TestCase):
                          '1:1:1:0.05|0.07|0.7|0.03|0.6|0.7|0.45|0.1')
 
     def test_crossover(self):
-        plays=1
-        op_plays=1
-        op_start_plays=1
+        plays, op_plays, op_start_plays = 1, 1, 1
 
         gambler1 = GamblerParams(plays=plays, op_plays=op_plays,
                                  op_start_plays=op_start_plays)
